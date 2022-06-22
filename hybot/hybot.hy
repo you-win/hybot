@@ -1,22 +1,21 @@
 (import os)
 (import discord)
 
-(setv client (discord.Client))
+(import cli [Cli])
+(import bot)
 
-#@(client.event (defn/a on-ready[]
-	(print "hello")))
-
-#@(client.event (defn/a on-message [message]
-	(if (= message.author client.user)
-		(return))
-
-	(if (message.content.startswith "!hello")
-		(await (message.channel.send "hello!")))))
-
-(defn main []
-	(setv token (os.environ.get "HYBOT_DISCORD_TOKEN"))
+(defn main [cli]
+	(if (cli.has-token)
+		(setv token (cli.args.token))
+		(setv token (os.environ.get "HYBOT_DISCORD_TOKEN")))
 	
-	(client.run token))
+	(bot.setup cli.is-verbose)
+
+	(bot.run token))
 
 (if (= __name__ "__main__")
-	(main))
+	(do
+		(setv cli (Cli))
+
+		(if (cli.is-main)
+			(main cli))))
