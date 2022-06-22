@@ -6,7 +6,7 @@
 
 (defn main [cli]
 	(if (cli.has-token)
-		(setv token (cli.args.token))
+		(setv token cli.args.token)
 		(setv token (os.environ.get "HYBOT_DISCORD_TOKEN")))
 	
 	(bot.setup cli.is-verbose)

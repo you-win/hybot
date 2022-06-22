@@ -43,6 +43,8 @@
 			(return (hello))]
 		[(= text "repo")
 			(return (repo))]
+		[(= text "hy")
+			(return (hy))]
 		[(= text "roll")
 			(return (roll split-text))])
 	
@@ -53,6 +55,9 @@
 
 (defn ^str repo []
 	(return "https://github.com/you-win/hybot"))
+
+(defn ^str hy []
+	(return "https://github.com/hylang/hy"))
 
 (defn ^str roll [^str split-text]
 	(setv ^int num 6)
