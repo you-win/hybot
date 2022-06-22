@@ -1,12 +1,17 @@
+(import sys)
 (import discord)
 (import random [randint])
 
 (setv client (discord.Client))
 (setv is-verbose False)
+(setv bot None)
 
 (defn ^None setup [^bool p-is-verbose]
 	(global is-verbose)
-	(setv is-verbose p-is-verbose))
+	(setv is-verbose p-is-verbose)
+
+	(global bot)
+	(setv bot (get sys.modules __name__)))
 
 #@(client.event (defn/a on-ready []
 	(print "bot ready!")))
@@ -37,33 +42,25 @@
 
 	(setv split-text (text.split " "))
 	(setv text (get split-text 0))
-	
-	(cond
-		[(= text "hello")
-			(return (hello))]
-		[(= text "repo")
-			(return (repo))]
-		[(= text "hy")
-			(return (hy))]
-		[(= text "roll")
-			(return (roll split-text))])
-	
-	(return "Invalid command"))
 
-(defn ^str hello []
+	(if (hasattr bot text)
+		(return ((getattr bot text) split-text))
+		(return "Invalid command")))
+
+(defn ^str hello [^str args]
 	(return "Hello!"))
 
-(defn ^str repo []
+(defn ^str repo [^str args]
 	(return "https://github.com/you-win/hybot"))
 
-(defn ^str hy []
+(defn ^str hy [^str args]
 	(return "https://github.com/hylang/hy"))
 
-(defn ^str roll [^str split-text]
+(defn ^str roll [^str args]
 	(setv ^int num 6)
-	(if (>= (len split-text) 2)
+	(if (>= (len args) 2)
 		(do
-			(setv input-number (get split-text 1))
+			(setv input-number (get args 1))
 			(if (input-number.isdigit)
 				(setv num (int input-number)))))
 	
